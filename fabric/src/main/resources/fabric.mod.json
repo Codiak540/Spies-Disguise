@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "spies-disguise",
+  "version": "${version}",
+  "name": "Spies Disguise",
+  "description": "Adds usefull Spy-related Items to Minecraft!",
+  "authors": [
+    "Codiak540"
+  ],
+  "contact": {
+    "homepage": ""
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/spies-disguise/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.code.tama.spiesDisguise.fabric.SpiesDisguiseFabric"
+    ],
+    "client": [
+      "com.code.tama.spiesDisguise.fabric.client.SpiesDisguiseFabricClient"
+    ]
+  },
+  "mixins": [
+    "spies-disguise.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "architectury": ">=9.2.14",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
