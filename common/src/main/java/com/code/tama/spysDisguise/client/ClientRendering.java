@@ -2,6 +2,7 @@ package com.code.tama.spysDisguise.client;
 
 import com.code.tama.spysDisguise.core.interfaces.IEntityDataSaver;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -37,6 +38,21 @@ public class ClientRendering {
                     fakeEntity.setSprinting(player.isSprinting());
                     fakeEntity.setNoGravity(player.isNoGravity());
                     fakeEntity.setPose(player.getPose());
+                    fakeEntity.walkDist = player.walkDist;
+                    fakeEntity.walkDistO = player.walkDistO;
+                    fakeEntity.xRotO = player.xRotO;
+                    fakeEntity.xo = player.xo;
+                    fakeEntity.yo = player.yo;
+//                    fakeEntity.walkAnimation.setSpeed(player.walkAnimation.speed());
+//                    fakeEntity.walkAnimation.position(player.walkAnimation.position());
+                    fakeEntity.yya = player.yya;
+                    fakeEntity.setSpeed(player.getSpeed());
+                    fakeEntity.setDeltaMovement(player.getDeltaMovement());
+                    fakeEntity.setOnGround(player.onGround());
+                    fakeEntity.attackAnim = player.attackAnim;
+                    fakeEntity.oAttackAnim = player.oAttackAnim;
+                    fakeEntity.swinging = player.swinging;
+                    fakeEntity.setSprinting(player.isSprinting());
 
                     poseStack.pushPose();
 
@@ -45,6 +61,18 @@ public class ClientRendering {
                     // poseStack.translate(0, -player.getEyeHeight() + fakeEntity.getEyeHeight(), 0);
 
                     // Render the fake entity model.
+                    EntityModel<LivingEntity> model = livingRenderer.getModel();
+
+//                    System.out.println(g);
+                    // Call setupAnim() with the correct parameters
+                    model.setupAnim(
+                            fakeEntity,
+                            g, // limbSwing
+                            f, // limbSwingAmount
+                            (float)fakeEntity.tickCount + g, // ageInTicks
+                            fakeEntity.yHeadRot, // headYaw
+                            fakeEntity.getXRot() // headPitch
+                    );
                     livingRenderer.render(fakeEntity, f, g, poseStack, bufferSource, packedLight);
 
                     poseStack.popPose();
