@@ -4,7 +4,7 @@ loaderVersion = "[47,)"
 license = "All Rights Reserved"
 
 [[mods]]
-modId = "spies-disguise"
+modId = "spysdisguise"
 version = "${version}"
 displayName = "Spies Disguise"
 authors = "Codiak540"
@@ -13,21 +13,21 @@ Adds usefull Spy-related Items to Minecraft!
 '''
 #logoFile = ""
 
-[[dependencies.spies-disguise]]
+[[dependencies.spysdisguise]]
 modId = "forge"
 mandatory = true
 versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.spies-disguise]]
+[[dependencies.spysdisguise]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.spies-disguise]]
+[[dependencies.spysdisguise]]
 modId = "architectury"
 mandatory = true
 versionRange = "[9.2.14,)"

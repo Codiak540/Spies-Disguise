@@ -1,13 +1,13 @@
 pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
-    }
+	repositories {
+		maven { url "https://maven.fabricmc.net/" }
+		maven { url "https://maven.architectury.dev/" }
+		maven { url "https://files.minecraftforge.net/maven/" }
+		gradlePluginPortal()
+	}
 }
 
-rootProject.name = 'spies-disguise'
+rootProject.name = 'spysdisguise'
 
 include 'common'
 include 'fabric'

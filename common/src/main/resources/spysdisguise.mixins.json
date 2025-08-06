@@ -1,11 +1,13 @@
 {
   "required": true,
-  "package": "com.code.tama.spiesDisguise.mixin",
+  "package": "com.code.tama.spysDisguise.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
+    "PlayerRendererMixin"
   ],
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

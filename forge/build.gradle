@@ -4,7 +4,7 @@ plugins {
 
 loom {
     forge {
-        mixinConfig "spies-disguise.mixins.json"
+        mixinConfig "spysdisguise.mixins.json"
     }
 }
 

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "spies-disguise",
+  "id": "spysdisguise",
   "version": "${version}",
-  "name": "Spies Disguise",
-  "description": "Adds usefull Spy-related Items to Minecraft!",
+  "name": "Spy's Disguise",
+  "description": "Adds useful Spy-related Items to Minecraft!",
   "authors": [
     "Codiak540"
   ],
@@ -11,18 +11,18 @@
     "homepage": ""
   },
   "license": "All-Rights-Reserved",
-  "icon": "assets/spies-disguise/icon.png",
+  "icon": "assets/spysdisguise/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.code.tama.spiesDisguise.fabric.SpiesDisguiseFabric"
+      "com.code.tama.spysDisguise.fabric.SpysDisguiseFabric"
     ],
     "client": [
-      "com.code.tama.spiesDisguise.fabric.client.SpiesDisguiseFabricClient"
+      "com.code.tama.spysDisguise.fabric.client.SpysDisguiseFabricClient"
     ]
   },
   "mixins": [
-    "spies-disguise.mixins.json"
+    "spysdisguise.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.17.0",
