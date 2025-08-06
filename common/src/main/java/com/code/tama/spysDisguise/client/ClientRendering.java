@@ -30,6 +30,8 @@ public class ClientRendering {
                     fakeEntity.yBodyRot = player.yBodyRot;
                     fakeEntity.yHeadRot = player.yHeadRot;
                     fakeEntity.yRotO = player.yRotO;
+                    fakeEntity.yBodyRotO = player.yBodyRotO;
+                    fakeEntity.yHeadRotO = player.yHeadRotO;
                     fakeEntity.setPose(player.getPose());
 
                     poseStack.pushPose();
