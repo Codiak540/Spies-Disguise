@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientRendering {
-    public static void renderDisguise(PoseStack poseStack, LivingEntity player, MultiBufferSource bufferSource, int packedLight) {
+    public static void renderDisguise(PoseStack poseStack, LivingEntity player, MultiBufferSource bufferSource, int packedLight, float f, float g) {
         EntityType<?> disguiseType = ((IEntityDataSaver)player).spymod$getDisguise();
 
         if (disguiseType != null && disguiseType != EntityType.PLAYER) {
@@ -45,7 +45,7 @@ public class ClientRendering {
                     // poseStack.translate(0, -player.getEyeHeight() + fakeEntity.getEyeHeight(), 0);
 
                     // Render the fake entity model.
-                    livingRenderer.render(fakeEntity, player.getYRot(), 0, poseStack, bufferSource, packedLight);
+                    livingRenderer.render(fakeEntity, f, g, poseStack, bufferSource, packedLight);
 
                     poseStack.popPose();
                 }

@@ -29,7 +29,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     @Overwrite
     public void render(AbstractClientPlayer abstractClientPlayer, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
         if(((IEntityDataSaver) abstractClientPlayer).spymod$getDisguise() != null) {
-            renderDisguise(poseStack, abstractClientPlayer, multiBufferSource, i);
+            renderDisguise(poseStack, abstractClientPlayer, multiBufferSource, i, f, g);
             return;
         }
         this.setModelProperties(abstractClientPlayer);
