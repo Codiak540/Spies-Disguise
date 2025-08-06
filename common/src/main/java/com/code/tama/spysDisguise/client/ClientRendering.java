@@ -32,6 +32,10 @@ public class ClientRendering {
                     fakeEntity.yRotO = player.yRotO;
                     fakeEntity.yBodyRotO = player.yBodyRotO;
                     fakeEntity.yHeadRotO = player.yHeadRotO;
+                    fakeEntity.setSwimming(player.isSwimming());
+                    fakeEntity.setArrowCount(player.getArrowCount());
+                    fakeEntity.setSprinting(player.isSprinting());
+                    fakeEntity.setNoGravity(player.isNoGravity());
                     fakeEntity.setPose(player.getPose());
 
                     poseStack.pushPose();
