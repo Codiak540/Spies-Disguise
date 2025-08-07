@@ -7,77 +7,103 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.WalkAnimationState;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ClientRendering {
-    public static void renderDisguise(PoseStack poseStack, LivingEntity player, MultiBufferSource bufferSource, int packedLight, float f, float g) {
-        EntityType<?> disguiseType = ((IEntityDataSaver)player).spymod$getDisguise();
+    public static void renderDisguise(PoseStack poseStack, LivingEntity player, MultiBufferSource bufferSource, int packedLight, float partialTicks, float yaw) {
+        EntityType<?> disguiseType = ((IEntityDataSaver) player).spymod$getDisguise();
 
-        if (disguiseType != null && disguiseType != EntityType.PLAYER) {
-            if (disguiseType.create(player.level()) instanceof LivingEntity fakeEntity) {
-                // Get the renderer for the disguise entity.
-                EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-                EntityRenderer<?> renderer = dispatcher.getRenderer(fakeEntity);
+        if (disguiseType == null) return;
 
-                if (renderer instanceof LivingEntityRenderer livingRenderer) {
+        // Create the disguise entity
+        Entity disguiseEntity = disguiseType.create(player.level());
 
-                    fakeEntity.copyPosition(player);
-                    fakeEntity.yBodyRot = player.yBodyRot;
-                    fakeEntity.yHeadRot = player.yHeadRot;
-                    fakeEntity.yRotO = player.yRotO;
-                    fakeEntity.yBodyRotO = player.yBodyRotO;
-                    fakeEntity.yHeadRotO = player.yHeadRotO;
-                    fakeEntity.setSwimming(player.isSwimming());
-                    fakeEntity.setArrowCount(player.getArrowCount());
-                    fakeEntity.setSprinting(player.isSprinting());
-                    fakeEntity.setNoGravity(player.isNoGravity());
-                    fakeEntity.setPose(player.getPose());
-                    fakeEntity.walkDist = player.walkDist;
-                    fakeEntity.walkDistO = player.walkDistO;
-                    fakeEntity.xRotO = player.xRotO;
-                    fakeEntity.xo = player.xo;
-                    fakeEntity.yo = player.yo;
-//                    fakeEntity.walkAnimation.setSpeed(player.walkAnimation.speed());
-//                    fakeEntity.walkAnimation.position(player.walkAnimation.position());
-                    fakeEntity.yya = player.yya;
-                    fakeEntity.setSpeed(player.getSpeed());
-                    fakeEntity.setDeltaMovement(player.getDeltaMovement());
-                    fakeEntity.setOnGround(player.onGround());
-                    fakeEntity.attackAnim = player.attackAnim;
-                    fakeEntity.oAttackAnim = player.oAttackAnim;
-                    fakeEntity.swinging = player.swinging;
-                    fakeEntity.setSprinting(player.isSprinting());
+        if (disguiseEntity == null) return;
 
-                    poseStack.pushPose();
+        // Match disguise position/rotation to the player
+        disguiseEntity.setPos(player.getX(), player.getY(), player.getZ());
+        disguiseEntity.setYRot(player.getYRot());
+        disguiseEntity.setXRot(player.getXRot());
+        disguiseEntity.tickCount = player.tickCount;
 
-                    // For more complex entities, may need to adjust the position
-                    // based on the difference in height, eye level, etc. ex:
-                    // poseStack.translate(0, -player.getEyeHeight() + fakeEntity.getEyeHeight(), 0);
+        // If it's a LivingEntity, copy pose (sneaking, swimming, etc.)
+        // Ensure the disguise is a LivingEntity
+        if (disguiseEntity instanceof LivingEntity livingDisguise) {
+            livingDisguise.setPose(player.getPose());
 
-                    // Render the fake entity model.
-                    EntityModel<LivingEntity> model = livingRenderer.getModel();
+            float bodyYaw = player.yBodyRot;
+            float headYaw = player.getYHeadRot();
+            float pitch = player.getXRot();
 
-//                    System.out.println(g);
-                    // Call setupAnim() with the correct parameters
-                    model.setupAnim(
-                            fakeEntity,
-                            g, // limbSwing
-                            f, // limbSwingAmount
-                            (float)fakeEntity.tickCount + g, // ageInTicks
-                            fakeEntity.yHeadRot, // headYaw
-                            fakeEntity.getXRot() // headPitch
-                    );
-                    livingRenderer.render(fakeEntity, f, g, poseStack, bufferSource, packedLight);
+            livingDisguise.setYRot(bodyYaw);
+            livingDisguise.setYBodyRot(bodyYaw);
+            livingDisguise.setYHeadRot(headYaw);
+            livingDisguise.setXRot(pitch);
 
-                    poseStack.popPose();
-                }
-            }
+            livingDisguise.yRotO = bodyYaw;
+            livingDisguise.yBodyRotO = bodyYaw;
+            livingDisguise.yHeadRotO = headYaw;
+            livingDisguise.xRotO = pitch;
+
+            disguiseEntity.tickCount = player.tickCount;
+
+            // Sync basic movement
+            livingDisguise.setDeltaMovement(player.getDeltaMovement());
+
+            float movementSpeed = (float) disguiseEntity.getDeltaMovement().horizontalDistance(); // or from player
+            livingDisguise.walkAnimation.update(movementSpeed * 4F, partialTicks); // tweak factor if needed
+
+
+//            try {
+//                WalkAnimationState source = player.walkAnimation;
+//                WalkAnimationState target = livingDisguise.walkAnimation;
+//
+//                Field speedField = WalkAnimationState.class.getDeclaredField("speed");
+//                Field positionField = WalkAnimationState.class.getDeclaredField("position");
+//                Field speedOldField = WalkAnimationState.class.getDeclaredField("speedOld");
+//
+//                speedField.setAccessible(true);
+//                positionField.setAccessible(true);
+//                speedOldField.setAccessible(true);
+//
+//                float speed = (float) speedField.get(source);
+//                float position = (float) positionField.get(source);
+//
+//                speedField.set(target, speed);
+//                positionField.set(target, position);
+//                speedOldField.set(target, speed); // ✅ Copy current speed into speedOld
+//            } catch (Exception e) {
+//                e.printStackTrace(); // Or log more cleanly
+//            }
+            System.out.println("Player speed: " + player.walkAnimation.speed()
+                    + " | disguise speed: " + livingDisguise.walkAnimation.speed());
+
+            System.out.println("Player position: " + player.walkAnimation.position()
+                    + " | disguise position: " + livingDisguise.walkAnimation.position());
         }
+
+
+
+        // Render the disguise
+        Minecraft.getInstance().getEntityRenderDispatcher().render(
+                disguiseEntity,
+                0.0, 0.0, 0.0, // Render relative to the player's position
+                yaw,
+                partialTicks,
+                poseStack,
+                bufferSource,
+                packedLight
+        );
     }
+
 }
